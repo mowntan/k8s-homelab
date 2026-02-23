@@ -65,6 +65,44 @@ spec:
             - name: downloads
               mountPath: {{ .Values.persistence.downloads.mountPath }}
             {{- end }}
+            {{- if .Values.vpn.enabled }}
+            - name: shared
+              mountPath: /shared
+            {{- end }}
+        {{- if .Values.vpn.enabled }}
+        - name: vpn
+          image: {{ .Values.vpn.image.repository }}:{{ .Values.vpn.image.tag }}
+          imagePullPolicy: {{ .Values.vpn.image.pullPolicy }}
+          {{- with .Values.vpn.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.vpn.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: vpn-config
+              mountPath: /vpn/vpn.conf
+              subPath: vpn.conf
+            - name: vpn-auth
+              mountPath: /vpn/auth
+              subPath: auth
+            - name: vpn-scripts
+              mountPath: /vpn/up.sh
+              subPath: up.sh
+            - name: vpn-scripts
+              mountPath: /vpn/down.sh
+              subPath: down.sh
+            - name: shared
+              mountPath: /shared
+            - name: dev-net-tun
+              mountPath: /dev/net/tun
+          {{- with .Values.vpn.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        {{- end }}
       volumes:
         {{- if .Values.persistence.config.enabled }}
         - name: config
@@ -76,6 +114,26 @@ spec:
           nfs:
             server: {{ .Values.persistence.downloads.nfs.server }}
             path: {{ .Values.persistence.downloads.nfs.path }}
+        {{- end }}
+        {{- if .Values.vpn.enabled }}
+        - name: shared
+          emptyDir: {}
+        - name: vpn-config
+          secret:
+            secretName: {{ include "qbittorrent.fullname" . }}-vpn-config
+            defaultMode: 0600
+        - name: vpn-auth
+          secret:
+            secretName: {{ include "qbittorrent.fullname" . }}-vpn-auth
+            defaultMode: 0600
+        - name: vpn-scripts
+          configMap:
+            name: {{ include "qbittorrent.fullname" . }}-vpn-scripts
+            defaultMode: 0755
+        - name: dev-net-tun
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

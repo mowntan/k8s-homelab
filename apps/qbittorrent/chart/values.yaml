@@ -64,3 +64,44 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# VPN sidecar configuration
+vpn:
+  enabled: false
+  image:
+    repository: ghcr.io/k8s-at-home/openvpn-client
+    tag: v1.4.0
+    pullPolicy: IfNotPresent
+
+  # Security context for VPN container (should run as root)
+  securityContext:
+    runAsUser: 0
+    runAsGroup: 0
+    capabilities:
+      add:
+        - NET_ADMIN
+
+  env:
+    - name: FIREWALL
+      value: "on"
+    - name: ROUTE
+      value: ""
+    - name: SUBNETS
+      value: ""
+
+  resources: {}
+
+  # VPN provider credentials (username and password)
+  auth: ""
+
+  # OpenVPN configuration file
+  configFile: ""
+
+  # Scripts to run when VPN connects/disconnects
+  scripts:
+    up: |
+      #!/bin/bash
+      echo "connected" > /shared/vpnstatus
+    down: |
+      #!/bin/bash
+      echo "disconnected" > /shared/vpnstatus

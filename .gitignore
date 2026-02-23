@@ -13,6 +13,9 @@ Thumbs.db
 *.tgz
 charts/index.yaml
 
+# Personal configuration files (contain secrets/personal settings)
+**/values-old.yaml
+
 # Build artifacts
 dist/
 build/
