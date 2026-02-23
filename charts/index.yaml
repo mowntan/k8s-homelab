@@ -1,0 +1,47 @@
+apiVersion: v1
+entries:
+  jackett:
+  - apiVersion: v2
+    appVersion: 0.22.1051
+    created: "2026-02-23T14:49:43.619858081Z"
+    description: Jackett torrent tracker proxy
+    digest: da9779f6cc4db6eb7290c9d6590aea77abf190dd5453d63f0d64acd8ed596bbc
+    name: jackett
+    type: application
+    urls:
+    - https://mowntan.github.io/k8s-homelab/charts/jackett-1.0.0.tgz
+    version: 1.0.0
+  qbittorrent:
+  - apiVersion: v2
+    appVersion: 5.0.2
+    created: "2026-02-23T14:49:43.6204688Z"
+    description: qBittorrent torrent client
+    digest: ae8c08b1a3d93c6c98a5157d44546a877802d1aed8338f050b7ac18a2b4a7210
+    name: qbittorrent
+    type: application
+    urls:
+    - https://mowntan.github.io/k8s-homelab/charts/qbittorrent-1.0.0.tgz
+    version: 1.0.0
+  radarr:
+  - apiVersion: v2
+    appVersion: 5.16.3.9541
+    created: "2026-02-23T14:49:43.621022303Z"
+    description: Radarr movie collection manager
+    digest: 08d79156586aa5e2bf6a4d784c935240af039a007686a52a26861d83fd886efe
+    name: radarr
+    type: application
+    urls:
+    - https://mowntan.github.io/k8s-homelab/charts/radarr-1.0.0.tgz
+    version: 1.0.0
+  sonarr:
+  - apiVersion: v2
+    appVersion: 4.0.11.2680
+    created: "2026-02-23T14:49:43.621586837Z"
+    description: Sonarr TV series collection manager
+    digest: 4bf509bbb0cf8a7f7ebc8a993e374ec875a19ec24849073a16de529d3b615e56
+    name: sonarr
+    type: application
+    urls:
+    - https://mowntan.github.io/k8s-homelab/charts/sonarr-1.0.0.tgz
+    version: 1.0.0
+generated: "2026-02-23T14:49:43.615217832Z"
