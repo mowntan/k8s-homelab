@@ -120,8 +120,15 @@ helm install <app>-test ./chart --dry-run --debug
 Trigger builds manually using GitHub CLI:
 
 ```bash
-cd apps/<app>
-gh workflow run build.yml
+# Trigger build for a specific app
+gh workflow run <app>-build.yml
+
+# Examples:
+gh workflow run sabnzbd-build.yml
+gh workflow run radarr-build.yml
+
+# Trigger version check
+gh workflow run <app>-check-release.yml
 ```
 
 ## Contributing
