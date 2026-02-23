@@ -28,12 +28,22 @@ nslookup yul-002.vpn.privado.io || echo "DNS resolution failed before firewall"
 if [ "${FIREWALL}" = "on" ]; then
     echo "Enabling firewall..."
 
+    # Set default policies to ACCEPT first (we'll add specific DROP rules later)
+    iptables -P INPUT ACCEPT
+    iptables -P OUTPUT ACCEPT
+    iptables -P FORWARD ACCEPT
+
+    # Flush existing rules
+    iptables -F
+    iptables -X
+
     # Allow loopback
     iptables -A INPUT -i lo -j ACCEPT
     iptables -A OUTPUT -o lo -j ACCEPT
 
-    # Allow established connections
+    # Allow established and related connections
     iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+    iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
     # Allow DNS to Kubernetes DNS servers
     for dns in ${DNS_SERVERS}; do
@@ -42,7 +52,7 @@ if [ "${FIREWALL}" = "on" ]; then
         iptables -A OUTPUT -d ${dns} -p tcp --dport 53 -j ACCEPT
     done
 
-    # Allow VPN traffic
+    # Allow all traffic on tun interfaces (VPN tunnel)
     iptables -A OUTPUT -o tun+ -j ACCEPT
     iptables -A INPUT -i tun+ -j ACCEPT
 
@@ -54,13 +64,12 @@ if [ "${FIREWALL}" = "on" ]; then
         done
     fi
 
-    # Allow outbound connections (needed for initial VPN connection)
+    # Allow outbound UDP/TCP for VPN connection (before tunnel is up)
     iptables -A OUTPUT -p udp -j ACCEPT
     iptables -A OUTPUT -p tcp -j ACCEPT
 
-    # Block inbound by default
-    iptables -P INPUT DROP
-    iptables -P FORWARD DROP
+    # Block unsolicited inbound traffic
+    iptables -A INPUT -m conntrack --ctstate NEW,INVALID -j DROP
 
     echo "Firewall rules applied"
 fi
