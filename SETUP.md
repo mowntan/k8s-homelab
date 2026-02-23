@@ -70,8 +70,7 @@ Each app has two GitHub Actions workflows:
 
 **Manual trigger:**
 ```bash
-cd apps/images/<app>
-gh workflow run check-release.yml
+gh workflow run <app>-check-release.yml
 ```
 
 ### 2. Build and Push Docker Image (`build.yml`)
@@ -88,8 +87,7 @@ gh workflow run check-release.yml
 
 **Manual trigger:**
 ```bash
-cd apps/images/<app>
-gh workflow run build.yml
+gh workflow run <app>-build.yml
 ```
 
 ### 3. Release Helm Charts (`release-charts.yml`)

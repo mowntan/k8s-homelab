@@ -8,11 +8,11 @@ This repository maintains the following applications:
 
 | App | Description | Image | Chart | Version |
 |-----|-------------|-------|-------|---------|
-| [Jackett](apps/images/jackett) | Torrent tracker proxy | `ghcr.io/mowntan/jackett` | ✅ | ![Version](https://img.shields.io/badge/dynamic/json?url=https://ghcr.io/v2/mowntan/jackett/tags/list&query=$.tags[0]&label=version) |
-| [qBittorrent](apps/images/qbittorrent) | BitTorrent client | `ghcr.io/mowntan/qbittorrent` | ✅ | ![Version](https://img.shields.io/badge/dynamic/json?url=https://ghcr.io/v2/mowntan/qbittorrent/tags/list&query=$.tags[0]&label=version) |
-| [Radarr](apps/images/radarr) | Movie collection manager | `ghcr.io/mowntan/radarr` | ✅ | ![Version](https://img.shields.io/badge/dynamic/json?url=https://ghcr.io/v2/mowntan/radarr/tags/list&query=$.tags[0]&label=version) |
-| [SABnzbd](apps/images/sabnzbd) | Usenet download client | `ghcr.io/mowntan/sabnzbd` | ✅ | ![Version](https://img.shields.io/badge/dynamic/json?url=https://ghcr.io/v2/mowntan/sabnzbd/tags/list&query=$.tags[0]&label=version) |
-| [Sonarr](apps/images/sonarr) | TV series collection manager | `ghcr.io/mowntan/sonarr` | ✅ | ![Version](https://img.shields.io/badge/dynamic/json?url=https://ghcr.io/v2/mowntan/sonarr/tags/list&query=$.tags[0]&label=version) |
+| [Jackett](apps/jackett) | Torrent tracker proxy | `ghcr.io/mowntan/jackett` | ✅ | ![Version](https://img.shields.io/badge/dynamic/json?url=https://ghcr.io/v2/mowntan/jackett/tags/list&query=$.tags[0]&label=version) |
+| [qBittorrent](apps/qbittorrent) | BitTorrent client | `ghcr.io/mowntan/qbittorrent` | ✅ | ![Version](https://img.shields.io/badge/dynamic/json?url=https://ghcr.io/v2/mowntan/qbittorrent/tags/list&query=$.tags[0]&label=version) |
+| [Radarr](apps/radarr) | Movie collection manager | `ghcr.io/mowntan/radarr` | ✅ | ![Version](https://img.shields.io/badge/dynamic/json?url=https://ghcr.io/v2/mowntan/radarr/tags/list&query=$.tags[0]&label=version) |
+| [SABnzbd](apps/sabnzbd) | Usenet download client | `ghcr.io/mowntan/sabnzbd` | ✅ | ![Version](https://img.shields.io/badge/dynamic/json?url=https://ghcr.io/v2/mowntan/sabnzbd/tags/list&query=$.tags[0]&label=version) |
+| [Sonarr](apps/sonarr) | TV series collection manager | `ghcr.io/mowntan/sonarr` | ✅ | ![Version](https://img.shields.io/badge/dynamic/json?url=https://ghcr.io/v2/mowntan/sonarr/tags/list&query=$.tags[0]&label=version) |
 
 ## Repository Structure
 
@@ -35,6 +35,10 @@ k8s-homelab/
 ## Using the Docker Images
 
 All images are published to the GitHub Container Registry and automatically updated when new upstream releases are detected.
+
+**Supported Architectures:**
+- `linux/amd64` (x86_64 - Intel/AMD processors)
+- `linux/arm64` (ARM 64-bit - Raspberry Pi 4/5, Apple Silicon, AWS Graviton, etc.)
 
 ### Pull an image
 

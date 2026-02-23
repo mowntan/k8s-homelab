@@ -80,7 +80,7 @@ helm install sabnzbd mowntan/sabnzbd
 helm install radarr mowntan/radarr -f my-values.yaml
 
 # Install from local chart
-helm install sonarr ./apps/images/sonarr/chart
+helm install sonarr ./apps/sonarr/chart
 ```
 
 ### Example custom values

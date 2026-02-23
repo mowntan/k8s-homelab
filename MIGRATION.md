@@ -17,7 +17,7 @@ charts/
 
 **This repository (new):**
 ```
-apps/images/
+apps/
 ├── app1/
 │   ├── docker/          # NEW: Custom Docker images
 │   └── chart/           # Helm chart
@@ -232,7 +232,7 @@ docker run -d \
 
 ### Getting Help
 
-- Check app README: `apps/images/<app>/README.md`
+- Check app README: `apps/<app>/README.md`
 - Review [SETUP.md](SETUP.md) for configuration
 - Check [QUICKSTART.md](QUICKSTART.md) for common tasks
 - Open an issue on GitHub

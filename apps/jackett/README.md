@@ -89,13 +89,13 @@ A scheduled workflow runs daily at 06:00 UTC and checks the [Jackett releases pa
 ### Docker build and push
 
 The build workflow runs on:
-- Push to `main` when `VERSION`, `docker/Dockerfile`, or `.github/workflows/build.yml` changes
+- Push to `main` when `VERSION`, `docker/Dockerfile`, or `.github/workflows/jackett-build.yml` changes
 - Manual trigger via **Actions → Build and push Docker image → Run workflow**
 
 Or via CLI (requires [`gh`](https://cli.github.com/)):
 
 ```bash
-gh workflow run build.yml
+gh workflow run jackett-build.yml
 ```
 
 The workflow builds the image and pushes it to `ghcr.io/mowntan/jackett` tagged with the version from `VERSION` and `latest`.
