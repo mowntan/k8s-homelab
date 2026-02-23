@@ -1,0 +1,59 @@
+name: Check for new Jackett release
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  check-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get latest Jackett release
+        id: jackett
+        run: |
+          LATEST=$(curl -fsSL https://api.github.com/repos/Jackett/Jackett/releases/latest | jq -r '.tag_name' | sed 's/^v//')
+          echo "latest=${LATEST}" >> "${GITHUB_OUTPUT}"
+
+      - name: Get current version
+        id: current
+        run: |
+          CURRENT=$(cat apps/jackett/VERSION | tr -d '[:space:]')
+          echo "current=${CURRENT}" >> "${GITHUB_OUTPUT}"
+
+      - name: Log version comparison
+        run: |
+          echo "Current: ${{ steps.current.outputs.current }}"
+          echo "Latest:  ${{ steps.jackett.outputs.latest }}"
+
+      - name: Update VERSION file
+        if: steps.jackett.outputs.latest != steps.current.outputs.current
+        run: echo "${{ steps.jackett.outputs.latest }}" > apps/jackett/VERSION
+
+      - name: Open PR with version bump
+        if: steps.jackett.outputs.latest != steps.current.outputs.current
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: bump Jackett to ${{ steps.jackett.outputs.latest }}"
+          branch: "update/jackett-${{ steps.jackett.outputs.latest }}"
+          title: "chore: bump Jackett to ${{ steps.jackett.outputs.latest }}"
+          body: |
+            Automated version bump for Jackett.
+
+            | | Version |
+            |---|---|
+            | Previous | `${{ steps.current.outputs.current }}` |
+            | New | `${{ steps.jackett.outputs.latest }}` |
+
+            Merging this PR will trigger the Docker image build workflow.
+
+            [Jackett ${{ steps.jackett.outputs.latest }} release notes](https://github.com/Jackett/Jackett/releases/tag/v${{ steps.jackett.outputs.latest }})
+          labels: automated,dependency-update

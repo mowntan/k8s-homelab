@@ -1,0 +1,59 @@
+name: Check for new qBittorrent release
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  check-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get latest qBittorrent release
+        id: qbittorrent
+        run: |
+          LATEST=$(curl -fsSL https://api.github.com/repos/qbittorrent/qBittorrent/releases/latest | jq -r '.tag_name' | sed 's/^release-//')
+          echo "latest=${LATEST}" >> "${GITHUB_OUTPUT}"
+
+      - name: Get current version
+        id: current
+        run: |
+          CURRENT=$(cat apps/qbittorrent/VERSION | tr -d '[:space:]')
+          echo "current=${CURRENT}" >> "${GITHUB_OUTPUT}"
+
+      - name: Log version comparison
+        run: |
+          echo "Current: ${{ steps.current.outputs.current }}"
+          echo "Latest:  ${{ steps.qbittorrent.outputs.latest }}"
+
+      - name: Update VERSION file
+        if: steps.qbittorrent.outputs.latest != steps.current.outputs.current
+        run: echo "${{ steps.qbittorrent.outputs.latest }}" > apps/qbittorrent/VERSION
+
+      - name: Open PR with version bump
+        if: steps.qbittorrent.outputs.latest != steps.current.outputs.current
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: bump qBittorrent to ${{ steps.qbittorrent.outputs.latest }}"
+          branch: "update/qbittorrent-${{ steps.qbittorrent.outputs.latest }}"
+          title: "chore: bump qBittorrent to ${{ steps.qbittorrent.outputs.latest }}"
+          body: |
+            Automated version bump for qBittorrent.
+
+            | | Version |
+            |---|---|
+            | Previous | `${{ steps.current.outputs.current }}` |
+            | New | `${{ steps.qbittorrent.outputs.latest }}` |
+
+            Merging this PR will trigger the Docker image build workflow.
+
+            [qBittorrent ${{ steps.qbittorrent.outputs.latest }} release notes](https://github.com/qbittorrent/qBittorrent/releases/tag/release-${{ steps.qbittorrent.outputs.latest }})
+          labels: automated,dependency-update
