@@ -1,7 +1,6 @@
-FROM debian:bookworm-slim
+FROM ubuntu:24.04
 
 ARG QBITTORRENT_VERSION=5.0.2
-ARG LIBTORRENT_VERSION=2.0.10
 
 # Install runtime and build dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -9,30 +8,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     python3 \
     build-essential \
+    cmake \
+    ninja-build \
+    pkg-config \
     libboost-dev \
-    libboost-system-dev \
     libssl-dev \
+    libtorrent-rasterbar-dev \
     qtbase5-dev \
     qttools5-dev \
     zlib1g-dev \
-    cmake \
-    ninja-build \
-    git \
     && rm -rf /var/lib/apt/lists/*
-
-# Build libtorrent-rasterbar from source (Debian's version is too old)
-RUN curl -fsSL "https://github.com/arvidn/libtorrent/releases/download/v${LIBTORRENT_VERSION}/libtorrent-rasterbar-${LIBTORRENT_VERSION}.tar.gz" \
-    | tar xz -C /tmp \
-    && cd /tmp/libtorrent-rasterbar-${LIBTORRENT_VERSION} \
-    && cmake -G "Ninja" -B build \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_INSTALL_PREFIX=/usr \
-        -DCMAKE_INSTALL_LIBDIR=lib \
-    && cmake --build build \
-    && cmake --install build \
-    && cd / \
-    && rm -rf /tmp/libtorrent-rasterbar-${LIBTORRENT_VERSION} \
-    && ldconfig
 
 # Build qBittorrent from source
 RUN curl -fsSL "https://github.com/qbittorrent/qBittorrent/archive/refs/tags/release-${QBITTORRENT_VERSION}.tar.gz" \
@@ -46,7 +31,7 @@ RUN curl -fsSL "https://github.com/qbittorrent/qBittorrent/archive/refs/tags/rel
     && cmake --install build \
     && cd / \
     && rm -rf /tmp/qBittorrent-release-${QBITTORRENT_VERSION} \
-    && apt-get purge -y build-essential cmake ninja-build git \
+    && apt-get purge -y build-essential cmake ninja-build pkg-config \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
