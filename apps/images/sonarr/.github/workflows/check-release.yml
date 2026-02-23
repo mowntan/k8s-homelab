@@ -1,0 +1,59 @@
+name: Check for new Sonarr release
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  check-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get latest Sonarr release
+        id: sonarr
+        run: |
+          LATEST=$(curl -fsSL https://api.github.com/repos/Sonarr/Sonarr/releases/latest | jq -r '.tag_name' | sed 's/^v//')
+          echo "latest=${LATEST}" >> "${GITHUB_OUTPUT}"
+
+      - name: Get current version
+        id: current
+        run: |
+          CURRENT=$(cat VERSION | tr -d '[:space:]')
+          echo "current=${CURRENT}" >> "${GITHUB_OUTPUT}"
+
+      - name: Log version comparison
+        run: |
+          echo "Current: ${{ steps.current.outputs.current }}"
+          echo "Latest:  ${{ steps.sonarr.outputs.latest }}"
+
+      - name: Update VERSION file
+        if: steps.sonarr.outputs.latest != steps.current.outputs.current
+        run: echo "${{ steps.sonarr.outputs.latest }}" > VERSION
+
+      - name: Open PR with version bump
+        if: steps.sonarr.outputs.latest != steps.current.outputs.current
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: bump Sonarr to ${{ steps.sonarr.outputs.latest }}"
+          branch: "update/sonarr-${{ steps.sonarr.outputs.latest }}"
+          title: "chore: bump Sonarr to ${{ steps.sonarr.outputs.latest }}"
+          body: |
+            Automated version bump for Sonarr.
+
+            | | Version |
+            |---|---|
+            | Previous | `${{ steps.current.outputs.current }}` |
+            | New | `${{ steps.sonarr.outputs.latest }}` |
+
+            Merging this PR will trigger the Docker image build workflow.
+
+            [Sonarr ${{ steps.sonarr.outputs.latest }} release notes](https://github.com/Sonarr/Sonarr/releases/tag/v${{ steps.sonarr.outputs.latest }})
+          labels: automated,dependency-update

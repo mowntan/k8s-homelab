@@ -1,0 +1,67 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/mowntan/sonarr
+  pullPolicy: IfNotPresent
+  # Overrides the image tag; defaults to chart appVersion
+  tag: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+podSecurityContext:
+  runAsUser: 6547
+  runAsGroup: 6547
+  fsGroup: 6547
+
+securityContext: {}
+
+env:
+  - name: TZ
+    value: "UTC"
+
+service:
+  type: ClusterIP
+  port: 8989
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: sonarr.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+persistence:
+  config:
+    enabled: true
+    mountPath: /config
+    storageClass: ""
+    existingClaim: ""
+    size: 1Gi
+    skipUninstall: true
+
+  tv:
+    enabled: false
+    mountPath: /tv
+    nfs:
+      server: ""
+      path: ""
+
+  downloads:
+    enabled: false
+    mountPath: /downloads
+    nfs:
+      server: ""
+      path: ""
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

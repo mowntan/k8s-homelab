@@ -1,0 +1,66 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/mowntan/qbittorrent
+  pullPolicy: IfNotPresent
+  # Overrides the image tag; defaults to chart appVersion
+  tag: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+podSecurityContext:
+  runAsUser: 6545
+  runAsGroup: 6545
+  fsGroup: 6545
+
+securityContext: {}
+
+env:
+  - name: TZ
+    value: "UTC"
+
+service:
+  type: ClusterIP
+  port: 8080
+
+# BitTorrent service for incoming connections
+bittorrentService:
+  enabled: true
+  type: LoadBalancer
+  port: 6881
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: qbittorrent.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+persistence:
+  config:
+    enabled: true
+    mountPath: /config
+    storageClass: ""
+    existingClaim: ""
+    size: 1Gi
+    skipUninstall: true
+
+  downloads:
+    enabled: false
+    mountPath: /downloads
+    nfs:
+      server: ""
+      path: ""
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

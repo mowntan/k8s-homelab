@@ -1,0 +1,56 @@
+name: Release Helm Charts
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/images/*/chart/**'
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.14.0
+
+      - name: Prepare charts directory
+        run: |
+          mkdir -p charts
+
+      - name: Package charts
+        run: |
+          for chart_dir in apps/images/*/chart; do
+            if [ -f "${chart_dir}/Chart.yaml" ]; then
+              echo "Packaging chart: ${chart_dir}"
+              helm package "${chart_dir}" -d charts/
+            fi
+          done
+
+      - name: Generate index
+        run: |
+          helm repo index charts/ --url https://mowntan.github.io/k8s-homelab/charts
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./charts
+          publish_branch: gh-pages
+          destination_dir: charts
