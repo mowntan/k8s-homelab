@@ -10,6 +10,10 @@ on:
       - '.github/workflows/sabnzbd-build.yml'
   workflow_dispatch:
 
+concurrency:
+  group: sabnzbd-build
+  cancel-in-progress: true
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: mowntan/sabnzbd

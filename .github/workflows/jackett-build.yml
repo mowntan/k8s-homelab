@@ -10,6 +10,10 @@ on:
       - '.github/workflows/jackett-build.yml'
   workflow_dispatch:
 
+concurrency:
+  group: jackett-build
+  cancel-in-progress: true
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: mowntan/jackett
