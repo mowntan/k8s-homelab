@@ -14,8 +14,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libboost-dev \
     libssl-dev \
     libtorrent-rasterbar-dev \
-    qtbase5-dev \
-    qttools5-dev \
+    qt6-base-dev \
+    qt6-tools-dev \
     zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
