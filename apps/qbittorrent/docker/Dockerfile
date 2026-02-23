@@ -1,38 +1,9 @@
 FROM ubuntu:24.04
 
-ARG QBITTORRENT_VERSION=5.0.2
-
-# Install runtime and build dependencies
+# Install qBittorrent from Ubuntu repositories
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    ca-certificates \
+    qbittorrent-nox \
     python3 \
-    build-essential \
-    cmake \
-    ninja-build \
-    pkg-config \
-    libboost-dev \
-    libssl-dev \
-    libtorrent-rasterbar-dev \
-    qt6-base-dev \
-    qt6-tools-dev \
-    zlib1g-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Build qBittorrent from source
-RUN curl -fsSL "https://github.com/qbittorrent/qBittorrent/archive/refs/tags/release-${QBITTORRENT_VERSION}.tar.gz" \
-    | tar xz -C /tmp \
-    && cd /tmp/qBittorrent-release-${QBITTORRENT_VERSION} \
-    && cmake -G "Ninja" -B build \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DGUI=OFF \
-        -DCMAKE_INSTALL_PREFIX=/usr \
-    && cmake --build build \
-    && cmake --install build \
-    && cd / \
-    && rm -rf /tmp/qBittorrent-release-${QBITTORRENT_VERSION} \
-    && apt-get purge -y build-essential cmake ninja-build pkg-config \
-    && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Create user and group
