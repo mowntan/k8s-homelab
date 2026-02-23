@@ -131,13 +131,13 @@ After deployment:
 ### Check for updates
 ```bash
 # Manually trigger version check for an app
-cd apps/images/sabnzbd
+cd apps/sabnzbd
 gh workflow run check-release.yml
 ```
 
 ### Build image manually
 ```bash
-cd apps/images/radarr
+cd apps/radarr
 gh workflow run build.yml
 ```
 
@@ -150,11 +150,11 @@ gh workflow run release-charts.yml
 ### Local development
 ```bash
 # Build Docker image locally
-cd apps/images/sonarr
+cd apps/sonarr
 docker build -t sonarr:test -f docker/Dockerfile docker/
 
 # Test Helm chart
-cd apps/images/jackett
+cd apps/jackett
 helm install jackett-test ./chart --dry-run --debug
 
 # Lint chart
@@ -179,10 +179,10 @@ chown -R 6547:6547 ./sonarr-config  # Sonarr
 ### Helm chart fails to install
 ```bash
 # Check chart syntax
-helm lint ./apps/images/<app>/chart
+helm lint ./apps/<app>/chart
 
 # Debug installation
-helm install <app> ./apps/images/<app>/chart --dry-run --debug
+helm install <app> ./apps/<app>/chart --dry-run --debug
 
 # Check Kubernetes events
 kubectl describe pod <pod-name>
@@ -197,7 +197,7 @@ kubectl logs <pod-name>
 ## Next Steps
 
 - Read [SETUP.md](SETUP.md) for detailed configuration
-- Check each app's README in `apps/images/<app>/README.md`
+- Check each app's README in `apps/<app>/README.md`
 - Configure ingress for external access
 - Set up persistent storage (NFS/local volumes)
 - Configure monitoring and backups

@@ -1,0 +1,60 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/mowntan/sabnzbd
+  pullPolicy: IfNotPresent
+  # Overrides the image tag; defaults to chart appVersion
+  tag: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+podSecurityContext:
+  runAsUser: 6543
+  runAsGroup: 6543
+  fsGroup: 6543
+
+securityContext: {}
+
+env:
+  - name: TZ
+    value: "UTC"
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: sabnzbd.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+persistence:
+  config:
+    enabled: true
+    mountPath: /config
+    storageClass: ""
+    existingClaim: ""
+    size: 1Gi
+    skipUninstall: true
+
+  downloads:
+    enabled: false
+    mountPath: /downloads
+    nfs:
+      server: ""
+      path: ""
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

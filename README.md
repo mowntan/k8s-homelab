@@ -19,18 +19,17 @@ This repository maintains the following applications:
 ```
 k8s-homelab/
 ├── apps/
-│   └── images/
-│       ├── jackett/
-│       │   ├── docker/Dockerfile       # Docker image definition
-│       │   ├── chart/                  # Helm chart
-│       │   ├── .github/workflows/      # CI/CD automation
-│       │   ├── VERSION                 # Current version
-│       │   └── README.md
-│       ├── qbittorrent/
-│       ├── radarr/
-│       ├── sabnzbd/
-│       └── sonarr/
-└── charts/                              # Published Helm chart repository
+│   ├── jackett/
+│   │   ├── docker/Dockerfile       # Docker image definition
+│   │   ├── chart/                  # Helm chart
+│   │   ├── .github/workflows/      # CI/CD automation
+│   │   ├── VERSION                 # Current version
+│   │   └── README.md
+│   ├── qbittorrent/
+│   ├── radarr/
+│   ├── sabnzbd/
+│   └── sonarr/
+└── charts/                          # Published Helm chart repository (via GitHub Pages)
 ```
 
 ## Using the Docker Images
@@ -67,13 +66,13 @@ git clone https://github.com/mowntan/k8s-homelab.git
 cd k8s-homelab
 
 # Install a chart
-helm install <app> ./apps/images/<app>/chart
+helm install <app> ./apps/<app>/chart
 ```
 
 ### Install with custom values
 
 ```bash
-helm install <app> ./apps/images/<app>/chart -f my-values.yaml
+helm install <app> ./apps/<app>/chart -f my-values.yaml
 ```
 
 ### Add the Helm repository (future)
@@ -107,14 +106,14 @@ Each app includes automated CI/CD workflows:
 ### Building images locally
 
 ```bash
-cd apps/images/<app>
+cd apps/<app>
 docker build -t <app>:local -f docker/Dockerfile docker/
 ```
 
 ### Testing Helm charts
 
 ```bash
-cd apps/images/<app>
+cd apps/<app>
 helm install <app>-test ./chart --dry-run --debug
 ```
 
@@ -123,7 +122,7 @@ helm install <app>-test ./chart --dry-run --debug
 Trigger builds manually using GitHub CLI:
 
 ```bash
-cd apps/images/<app>
+cd apps/<app>
 gh workflow run build.yml
 ```
 

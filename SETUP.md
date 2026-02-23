@@ -124,7 +124,7 @@ helm install sabnzbd mowntan/sabnzbd
 ### Build Docker image
 
 ```bash
-cd apps/images/<app>
+cd apps/<app>
 docker build -t <app>:local -f docker/Dockerfile docker/
 ```
 
@@ -140,7 +140,7 @@ docker run -it --rm \
 ### Test Helm chart
 
 ```bash
-cd apps/images/<app>
+cd apps/<app>
 helm lint ./chart
 helm install <app>-test ./chart --dry-run --debug
 ```
@@ -148,7 +148,7 @@ helm install <app>-test ./chart --dry-run --debug
 ### Package Helm chart manually
 
 ```bash
-cd apps/images/<app>
+cd apps/<app>
 helm package ./chart -d /tmp/
 ```
 
@@ -158,7 +158,7 @@ helm package ./chart -d /tmp/
 
 1. Create directory structure:
 ```bash
-mkdir -p apps/images/<app>/{docker,chart/templates,.github/workflows}
+mkdir -p apps/<app>/{docker,chart/templates,.github/workflows}
 ```
 
 2. Copy and modify files from an existing app:
