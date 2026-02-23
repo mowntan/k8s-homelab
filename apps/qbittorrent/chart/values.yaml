@@ -80,6 +80,7 @@ vpn:
     capabilities:
       add:
         - NET_ADMIN
+        - NET_RAW
 
   env:
     - name: FIREWALL
