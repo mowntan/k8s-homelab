@@ -3,4 +3,4 @@ name: jackett
 description: Jackett torrent tracker proxy
 type: application
 version: 1.0.0
-appVersion: "0.22.1051"
+appVersion: "0.24.1184"
