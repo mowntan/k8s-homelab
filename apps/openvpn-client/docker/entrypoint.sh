@@ -11,9 +11,18 @@ cleanup() {
 
 trap cleanup SIGTERM SIGINT
 
+# Debug: Show resolv.conf content
+echo "=== /etc/resolv.conf content ==="
+cat /etc/resolv.conf
+echo "================================"
+
 # Get DNS servers from resolv.conf before we potentially restrict network access
 DNS_SERVERS=$(awk '/^nameserver/ {print $2}' /etc/resolv.conf | head -n 3)
-echo "Using DNS servers: ${DNS_SERVERS}"
+echo "Extracted DNS servers: ${DNS_SERVERS}"
+
+# Test DNS resolution before applying firewall rules
+echo "Testing DNS resolution before firewall..."
+nslookup yul-002.vpn.privado.io || echo "DNS resolution failed before firewall"
 
 # Setup firewall rules if FIREWALL is enabled
 if [ "${FIREWALL}" = "on" ]; then
