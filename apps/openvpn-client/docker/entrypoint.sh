@@ -11,6 +11,10 @@ cleanup() {
 
 trap cleanup SIGTERM SIGINT
 
+# Get DNS servers from resolv.conf before we potentially restrict network access
+DNS_SERVERS=$(awk '/^nameserver/ {print $2}' /etc/resolv.conf | head -n 3)
+echo "Using DNS servers: ${DNS_SERVERS}"
+
 # Setup firewall rules if FIREWALL is enabled
 if [ "${FIREWALL}" = "on" ]; then
     echo "Enabling firewall..."
@@ -21,6 +25,13 @@ if [ "${FIREWALL}" = "on" ]; then
 
     # Allow established connections
     iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+    # Allow DNS to Kubernetes DNS servers
+    for dns in ${DNS_SERVERS}; do
+        echo "Allowing DNS to ${dns}"
+        iptables -A OUTPUT -d ${dns} -p udp --dport 53 -j ACCEPT
+        iptables -A OUTPUT -d ${dns} -p tcp --dport 53 -j ACCEPT
+    done
 
     # Allow VPN traffic
     iptables -A OUTPUT -o tun+ -j ACCEPT
@@ -34,8 +45,11 @@ if [ "${FIREWALL}" = "on" ]; then
         done
     fi
 
-    # Block everything else by default
-    iptables -P OUTPUT DROP
+    # Allow outbound connections (needed for initial VPN connection)
+    iptables -A OUTPUT -p udp -j ACCEPT
+    iptables -A OUTPUT -p tcp -j ACCEPT
+
+    # Block inbound by default
     iptables -P INPUT DROP
     iptables -P FORWARD DROP
 
