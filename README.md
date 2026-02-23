@@ -75,12 +75,10 @@ helm install <app> ./apps/<app>/chart
 helm install <app> ./apps/<app>/chart -f my-values.yaml
 ```
 
-### Add the Helm repository (future)
-
-Once the Helm chart repository is published via GitHub Pages:
+### Add the Helm repository
 
 ```bash
-helm repo add mowntan https://mowntan.github.io/k8s-homelab
+helm repo add mowntan https://mowntan.github.io/k8s-homelab/charts
 helm repo update
 helm install <app> mowntan/<app>
 ```
