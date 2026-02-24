@@ -1,0 +1,33 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/flaresolverr/flaresolverr
+  pullPolicy: IfNotPresent
+  tag: "v3.3.21"
+
+nameOverride: ""
+fullnameOverride: ""
+
+podSecurityContext: {}
+
+securityContext: {}
+
+env:
+  - name: LOG_LEVEL
+    value: "info"
+  - name: LOG_HTML
+    value: "false"
+  - name: TZ
+    value: "UTC"
+
+service:
+  type: ClusterIP
+  port: 8191
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

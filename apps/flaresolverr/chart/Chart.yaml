@@ -1,0 +1,6 @@
+apiVersion: v2
+name: flaresolverr
+description: FlareSolverr - Proxy server to bypass Cloudflare protection
+type: application
+version: 1.0.0
+appVersion: "v3.3.21"
