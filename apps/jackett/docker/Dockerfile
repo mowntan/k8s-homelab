@@ -36,4 +36,4 @@ VOLUME ["/config", "/downloads"]
 
 EXPOSE 9117
 
-CMD ["./jackett", "--NoUpdates", "--DataFolder=/config"]
+CMD ["./jackett", "--NoUpdates", "--DataFolder=/config", "--ListenPublic"]
