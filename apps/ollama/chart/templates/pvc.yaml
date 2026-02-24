@@ -1,0 +1,43 @@
+{{- if and .Values.persistence.models.enabled (not .Values.persistence.models.existingClaim) -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "ollama.fullname" . }}-models
+  labels:
+    {{- include "ollama.labels" . | nindent 4 }}
+  {{- if .Values.persistence.models.skipUninstall }}
+  annotations:
+    "helm.sh/resource-policy": keep
+  {{- end }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  {{- if .Values.persistence.models.storageClass }}
+  storageClassName: {{ .Values.persistence.models.storageClass | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.models.size }}
+{{- end }}
+---
+{{- if and .Values.webui.enabled .Values.webui.persistence.enabled (not .Values.webui.persistence.existingClaim) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "ollama.fullname" . }}-webui
+  labels:
+    {{- include "ollama.labels" . | nindent 4 }}
+  {{- if .Values.webui.persistence.skipUninstall }}
+  annotations:
+    "helm.sh/resource-policy": keep
+  {{- end }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  {{- if .Values.webui.persistence.storageClass }}
+  storageClassName: {{ .Values.webui.persistence.storageClass | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.webui.persistence.size }}
+{{- end }}
