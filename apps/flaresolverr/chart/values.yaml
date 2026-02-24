@@ -19,12 +19,22 @@ env:
     value: "false"
   - name: TZ
     value: "UTC"
+  - name: BROWSER_TIMEOUT
+    value: "90000"
+  - name: CHALLENGE_TIMEOUT
+    value: "90000"
 
 service:
   type: ClusterIP
   port: 8191
 
-resources: {}
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "500m"
+  limits:
+    memory: "1Gi"
+    cpu: "1000m"
 
 nodeSelector: {}
 
