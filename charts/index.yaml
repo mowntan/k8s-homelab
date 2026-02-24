@@ -3,9 +3,9 @@ entries:
   jackett:
   - apiVersion: v2
     appVersion: 0.24.1184
-    created: "2026-02-23T21:50:50.149081256Z"
+    created: "2026-02-24T01:34:34.445523627Z"
     description: Jackett torrent tracker proxy
-    digest: f09a06386ca55ff43df4422348a2748b966fb3254ac2747aefba51a01da29ef8
+    digest: bc535079136129d82c7972b6690c6ee7d831f46c02e08cbc1ce6f840228c8b10
     name: jackett
     type: application
     urls:
@@ -14,9 +14,9 @@ entries:
   qbittorrent:
   - apiVersion: v2
     appVersion: 4.6.3
-    created: "2026-02-23T21:50:50.149493699Z"
+    created: "2026-02-24T01:34:34.445940415Z"
     description: qBittorrent torrent client
-    digest: 2fc6736caeeb109eb16d33ae10a2aeeb0607ea67f5f07715d38738232b709d4b
+    digest: 93cc4a011130cdc29f6152c4c300bb222a8a47b37f9150bf96578180b4519a50
     name: qbittorrent
     type: application
     urls:
@@ -25,9 +25,9 @@ entries:
   radarr:
   - apiVersion: v2
     appVersion: 5.16.3.9541
-    created: "2026-02-23T21:50:50.149825731Z"
+    created: "2026-02-24T01:34:34.446265072Z"
     description: Radarr movie collection manager
-    digest: f9e10f8eb715c3da20dbb541b50083ccd15116452ce61acd370958f8a3340188
+    digest: 25b91dce14944740266ef71cda272d082ae5f0960105cd0f5ae0765c3a6f194b
     name: radarr
     type: application
     urls:
@@ -36,9 +36,9 @@ entries:
   sabnzbd:
   - apiVersion: v2
     appVersion: 4.5.5
-    created: "2026-02-23T21:50:50.150177209Z"
+    created: "2026-02-24T01:34:34.446573728Z"
     description: SABnzbd Usenet download client
-    digest: a61099764d00efe39e12c1fd46e85432b807b3a541b43b51faa10652bf00b4b2
+    digest: 1295866db1cdb5eaf3c6a0888813b921b5664a9cfbfc30fda403e40b630343ec
     name: sabnzbd
     type: application
     urls:
@@ -47,12 +47,12 @@ entries:
   sonarr:
   - apiVersion: v2
     appVersion: 4.0.11.2680
-    created: "2026-02-23T21:50:50.150456703Z"
+    created: "2026-02-24T01:34:34.446854342Z"
     description: Sonarr TV series collection manager
-    digest: 6f95c52329b6ec270f1c998c07648baf22bda463fd102277e0a362ceeb84068a
+    digest: 05adc8a966cf2b25a7c0dad7fa50fbb130c93ef99e91a0d6559f4530a064a122
     name: sonarr
     type: application
     urls:
     - https://mowntan.github.io/k8s-homelab/charts/sonarr-1.0.0.tgz
     version: 1.0.0
-generated: "2026-02-23T21:50:50.148587301Z"
+generated: "2026-02-24T01:34:34.445076212Z"
