@@ -15,11 +15,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install unrar from non-free repository
-RUN echo "deb http://deb.debian.org/debian bookworm non-free non-free-firmware" > /etc/apt/sources.list.d/non-free.list && \
+RUN printf "Types: deb\nURIs: http://deb.debian.org/debian\nSuites: bookworm\nComponents: non-free non-free-firmware\nSigned-By: /usr/share/keyrings/debian-archive-keyring.gpg\n" > /etc/apt/sources.list.d/non-free.sources && \
     apt-get update && \
     apt-get install -y --no-install-recommends unrar && \
     rm -rf /var/lib/apt/lists/* && \
-    rm /etc/apt/sources.list.d/non-free.list
+    rm /etc/apt/sources.list.d/non-free.sources
 
 # Create user and group matching the expected UID/GID
 RUN groupadd -g 6543 sabnzbd && \
