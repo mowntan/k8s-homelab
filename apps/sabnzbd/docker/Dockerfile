@@ -9,11 +9,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-dev \
     python3-cryptography \
     par2 \
-    unrar-free \
     p7zip-full \
     curl \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
+
+# Install unrar from non-free repository
+RUN echo "deb http://deb.debian.org/debian bookworm non-free non-free-firmware" > /etc/apt/sources.list.d/non-free.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends unrar && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm /etc/apt/sources.list.d/non-free.list
 
 # Create user and group matching the expected UID/GID
 RUN groupadd -g 6543 sabnzbd && \
