@@ -83,16 +83,16 @@ spec:
             httpGet:
               path: /health
               port: http
-            initialDelaySeconds: 60
+            initialDelaySeconds: 600
             periodSeconds: 30
             timeoutSeconds: 10
           readinessProbe:
             httpGet:
               path: /health
               port: http
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
+            initialDelaySeconds: 300
+            periodSeconds: 15
+            timeoutSeconds: 10
           {{- with .Values.coordinator.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
