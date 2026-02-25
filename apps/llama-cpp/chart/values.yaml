@@ -69,14 +69,19 @@ rpcWorkers:
 
   resources: {}
 
-# Model storage: hostPath mount so each node can read the local GGUF file.
-# The model file must exist at hostPath on every node that runs an RPC worker.
+# Model storage
 persistence:
   models:
-    # Path on the host node filesystem
-    hostPath: /var/lib/llama-models
     # Path inside the container
     mountPath: /models
+    # NFS share (recommended): mount a shared NFS volume on all nodes.
+    # Set nfs.server and nfs.path to enable.
+    nfs:
+      server: ""
+      path: ""
+    # hostPath fallback: path on each host node's local disk.
+    # Only used if nfs.server is empty.
+    hostPath: /var/lib/llama-models
 
 nodeSelector: {}
 tolerations: []

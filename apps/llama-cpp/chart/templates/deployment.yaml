@@ -77,9 +77,15 @@ spec:
               mountPath: {{ .Values.persistence.models.mountPath }}
       volumes:
         - name: models
+          {{- if .Values.persistence.models.nfs.server }}
+          nfs:
+            server: {{ .Values.persistence.models.nfs.server }}
+            path: {{ .Values.persistence.models.nfs.path }}
+          {{- else }}
           hostPath:
             path: {{ .Values.persistence.models.hostPath }}
             type: DirectoryOrCreate
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
