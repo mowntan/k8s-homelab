@@ -16,10 +16,10 @@ RUN git clone --depth 1 --branch b${LLAMA_CPP_VERSION} \
     cmake -B /build/build /build \
         -DLLAMA_BUILD_TESTS=OFF \
         -DBUILD_SHARED_LIBS=OFF && \
-    cmake --build /build/build --target llama-server llama-rpc-server -j$(nproc) && \
+    cmake --build /build/build --target llama-server rpc-server -j$(nproc) && \
     mkdir -p /out && \
     cp /build/build/bin/llama-server /out/llama-server && \
-    cp /build/build/bin/llama-rpc-server /out/llama-rpc-server
+    cp /build/build/tools/rpc/rpc-server /out/llama-rpc-server
 
 # ─────────────────────────────────────────────
 FROM debian:bookworm-slim
