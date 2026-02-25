@@ -3,9 +3,9 @@ entries:
   flaresolverr:
   - apiVersion: v2
     appVersion: v3.3.21
-    created: "2026-02-25T03:33:08.139168176Z"
+    created: "2026-02-25T12:23:05.957112322Z"
     description: FlareSolverr - Proxy server to bypass Cloudflare protection
-    digest: d095a6ad27a65ae0d7a235862cbfc16d7fe7acb3767bc92b94189663078ff85d
+    digest: 45b7732937183de5f174b1e1f35b86bb9e2d5416f76d3b38fe42674f34fa8514
     name: flaresolverr
     type: application
     urls:
@@ -14,9 +14,9 @@ entries:
   jackett:
   - apiVersion: v2
     appVersion: 0.24.1184
-    created: "2026-02-25T03:33:08.139493522Z"
+    created: "2026-02-25T12:23:05.957496018Z"
     description: Jackett torrent tracker proxy
-    digest: 99a7242ba2592917e99c32c5b4da26c76726b830e53019551fa5997a3f3e0274
+    digest: 5920fb5c8989b0865626695e903b87f298f91df0658cfb49c676da254ce5b017
     name: jackett
     type: application
     urls:
@@ -25,9 +25,9 @@ entries:
   llama-cpp:
   - apiVersion: v2
     appVersion: b8148
-    created: "2026-02-25T03:33:08.139842223Z"
+    created: "2026-02-25T12:23:05.95785063Z"
     description: llama.cpp distributed inference with RPC multi-node support
-    digest: b287515a9452e19230bf4d3e4aa50beb17325237308ed9ed6c0009c1fa294791
+    digest: cc9e0133ce24b8507477fbc723172335eff1e25eebda27fae1a57a3f2fbc2ce1
     name: llama-cpp
     type: application
     urls:
@@ -36,9 +36,9 @@ entries:
   ollama:
   - apiVersion: v2
     appVersion: 0.17.0
-    created: "2026-02-25T03:33:08.140191203Z"
+    created: "2026-02-25T12:23:05.958229467Z"
     description: Ollama local large language model server
-    digest: f6ad0ac1cb776dbe15138e032e8da326311523b97c0ed7e3291bf8997e5a1715
+    digest: 0809ee711e0998e74eb7bf782c7c636d85df4631960736cc5731adfedbcb046f
     name: ollama
     type: application
     urls:
@@ -47,9 +47,9 @@ entries:
   qbittorrent:
   - apiVersion: v2
     appVersion: 4.6.3
-    created: "2026-02-25T03:33:08.140579517Z"
+    created: "2026-02-25T12:23:05.958673075Z"
     description: qBittorrent torrent client
-    digest: b6ab7072b323c5004e4402e1caa9cce262e4bc69d9641d45043d776e1ea85414
+    digest: 98bbc3686a579597ce78e4e6d8fdcdbd5585b0917863727b1d446ca68243fa8d
     name: qbittorrent
     type: application
     urls:
@@ -58,9 +58,9 @@ entries:
   radarr:
   - apiVersion: v2
     appVersion: 5.16.3.9541
-    created: "2026-02-25T03:33:08.140888542Z"
+    created: "2026-02-25T12:23:05.958968306Z"
     description: Radarr movie collection manager
-    digest: c4206797db86597d238dff19c149aa1e30a1e940a1385e7b762bb1df0fafc657
+    digest: a353e74fc82d5d6d4fbb2a10ffad55c152e84f3b330521d943304791f2906353
     name: radarr
     type: application
     urls:
@@ -69,9 +69,9 @@ entries:
   sabnzbd:
   - apiVersion: v2
     appVersion: 4.5.5
-    created: "2026-02-25T03:33:08.141204501Z"
+    created: "2026-02-25T12:23:05.959285278Z"
     description: SABnzbd Usenet download client
-    digest: c0bce89a9523536a44df550a25916667f700956decc8226bc3bfad93892aa4b9
+    digest: c63de234651c4ae658d4329bf546e82fdd037931eafca83fc63ccbe21151ea5f
     name: sabnzbd
     type: application
     urls:
@@ -80,12 +80,12 @@ entries:
   sonarr:
   - apiVersion: v2
     appVersion: 4.0.11.2680
-    created: "2026-02-25T03:33:08.141490314Z"
+    created: "2026-02-25T12:23:05.959597941Z"
     description: Sonarr TV series collection manager
-    digest: 00a640c326ac8492ffbe16257474c98278b2d9b487c1bcc98e5e66cb8aaef0f5
+    digest: f0849bb5431b99fccf129a006c43c161cfd1d54568a99f4435b12495f9a24c21
     name: sonarr
     type: application
     urls:
     - https://mowntan.github.io/k8s-homelab/charts/sonarr-1.0.0.tgz
     version: 1.0.0
-generated: "2026-02-25T03:33:08.138776056Z"
+generated: "2026-02-25T12:23:05.956687249Z"
