@@ -21,6 +21,23 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.rpcWorkers.enabled }}
+      initContainers:
+        - name: resolve-rpc-workers
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              RPC_SVC="{{ include "llama-cpp.fullname" . }}-rpc-worker.{{ .Release.Namespace }}.svc.cluster.local"
+              echo "Resolving ${RPC_SVC}..."
+              ADDRS=$(nslookup "${RPC_SVC}" | awk '/^Address: / && !/^Address: 10\.43/ { print $2":50052" }' | paste -sd,)
+              echo "RPC workers: ${ADDRS}"
+              echo "${ADDRS}" > /rpc/workers
+          volumeMounts:
+            - name: rpc-config
+              mountPath: /rpc
+      {{- end }}
       containers:
         - name: llama-server
           {{- with .Values.securityContext }}
@@ -34,22 +51,30 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           command:
-            - llama-server
-            - --host
-            - "0.0.0.0"
-            - --port
-            - "8080"
-            - --model
-            - {{ .Values.model.path | quote }}
-            - --ctx-size
-            - {{ .Values.model.contextSize | quote }}
-            {{- if .Values.rpcWorkers.enabled }}
-            - --rpc
-            - {{ include "llama-cpp.rpcAddress" . | quote }}
-            {{- end }}
-            {{- range .Values.model.extraArgs }}
-            - {{ . | quote }}
-            {{- end }}
+            - sh
+            - -c
+            - |
+              ARGS="--host 0.0.0.0 --port 8080 --model {{ .Values.model.path }} --ctx-size {{ .Values.model.contextSize }}"
+              {{- if .Values.rpcWorkers.enabled }}
+              RPC=$(cat /rpc/workers)
+              echo "Starting llama-server with --rpc ${RPC}"
+              ARGS="${ARGS} --rpc ${RPC}"
+              {{- end }}
+              {{- range .Values.model.extraArgs }}
+              ARGS="${ARGS} {{ . }}"
+              {{- end }}
+              exec llama-server ${ARGS}
+          {{- if .Values.rpcWorkers.enabled }}
+          volumeMounts:
+            - name: rpc-config
+              mountPath: /rpc
+            - name: models
+              mountPath: {{ .Values.persistence.models.mountPath }}
+          {{- else }}
+          volumeMounts:
+            - name: models
+              mountPath: {{ .Values.persistence.models.mountPath }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080
@@ -72,10 +97,11 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          volumeMounts:
-            - name: models
-              mountPath: {{ .Values.persistence.models.mountPath }}
       volumes:
+        {{- if .Values.rpcWorkers.enabled }}
+        - name: rpc-config
+          emptyDir: {}
+        {{- end }}
         - name: models
           {{- if .Values.persistence.models.nfs.server }}
           nfs:
