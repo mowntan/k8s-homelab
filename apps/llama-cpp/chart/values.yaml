@@ -1,0 +1,83 @@
+image:
+  repository: ghcr.io/mowntan/llama-cpp
+  pullPolicy: IfNotPresent
+  # Overrides the image tag; defaults to chart appVersion
+  tag: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+podSecurityContext:
+  runAsUser: 6551
+  runAsGroup: 6551
+  fsGroup: 6551
+
+securityContext: {}
+
+# Model configuration (used by the coordinator)
+model:
+  # Path to the GGUF model file inside the container
+  path: /models/model.gguf
+  # Context window size in tokens
+  contextSize: 4096
+  # Extra flags passed to llama-server
+  extraArgs: []
+  # e.g:
+  # extraArgs:
+  #   - "--n-predict"
+  #   - "512"
+
+# Coordinator: runs llama-server, serves the OpenAI-compatible HTTP API
+coordinator:
+  enabled: true
+  replicaCount: 1
+
+  env:
+    - name: TZ
+      value: "UTC"
+
+  service:
+    type: ClusterIP
+    port: 8080
+
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+    hosts:
+      - host: llama.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: []
+
+  resources: {}
+
+# RPC workers: run llama-rpc-server on every node as a DaemonSet,
+# exposing local RAM/compute to the coordinator
+rpcWorkers:
+  enabled: true
+
+  # Restrict which nodes run the RPC worker pod.
+  # Leave empty to run on all nodes.
+  nodeSelector: {}
+  # e.g. target only nodes labelled role=inference:
+  # nodeSelector:
+  #   role: inference
+
+  tolerations: []
+
+  resources: {}
+
+# Model storage: hostPath mount so each node can read the local GGUF file.
+# The model file must exist at hostPath on every node that runs an RPC worker.
+persistence:
+  models:
+    # Path on the host node filesystem
+    hostPath: /var/lib/llama-models
+    # Path inside the container
+    mountPath: /models
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

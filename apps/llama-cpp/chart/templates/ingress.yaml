@@ -1,0 +1,35 @@
+{{- if and .Values.coordinator.enabled .Values.coordinator.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "llama-cpp.fullname" . }}
+  labels:
+    {{- include "llama-cpp.labels" . | nindent 4 }}
+  {{- with .Values.coordinator.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.coordinator.ingress.className }}
+  ingressClassName: {{ .Values.coordinator.ingress.className }}
+  {{- end }}
+  {{- if .Values.coordinator.ingress.tls }}
+  tls:
+    {{- toYaml .Values.coordinator.ingress.tls | nindent 4 }}
+  {{- end }}
+  rules:
+    {{- range .Values.coordinator.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
+            backend:
+              service:
+                name: {{ include "llama-cpp.fullname" $ }}
+                port:
+                  name: http
+          {{- end }}
+    {{- end }}
+{{- end }}

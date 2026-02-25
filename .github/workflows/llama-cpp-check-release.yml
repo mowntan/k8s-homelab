@@ -1,0 +1,59 @@
+name: Check for new llama.cpp release
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  check-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get latest llama.cpp release
+        id: llama
+        run: |
+          LATEST=$(curl -fsSL https://api.github.com/repos/ggml-org/llama.cpp/releases/latest | jq -r '.tag_name')
+          echo "latest=${LATEST}" >> "${GITHUB_OUTPUT}"
+
+      - name: Get current version
+        id: current
+        run: |
+          CURRENT=$(cat apps/llama-cpp/VERSION | tr -d '[:space:]')
+          echo "current=${CURRENT}" >> "${GITHUB_OUTPUT}"
+
+      - name: Log version comparison
+        run: |
+          echo "Current: ${{ steps.current.outputs.current }}"
+          echo "Latest:  ${{ steps.llama.outputs.latest }}"
+
+      - name: Update VERSION file
+        if: steps.llama.outputs.latest != steps.current.outputs.current
+        run: echo "${{ steps.llama.outputs.latest }}" > apps/llama-cpp/VERSION
+
+      - name: Open PR with version bump
+        if: steps.llama.outputs.latest != steps.current.outputs.current
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: bump llama.cpp to ${{ steps.llama.outputs.latest }}"
+          branch: "update/llama-cpp-${{ steps.llama.outputs.latest }}"
+          title: "chore: bump llama.cpp to ${{ steps.llama.outputs.latest }}"
+          body: |
+            Automated version bump for llama.cpp.
+
+            | | Version |
+            |---|---|
+            | Previous | `${{ steps.current.outputs.current }}` |
+            | New | `${{ steps.llama.outputs.latest }}` |
+
+            Merging this PR will trigger the Docker image build workflow.
+
+            [llama.cpp ${{ steps.llama.outputs.latest }} release notes](https://github.com/ggml-org/llama.cpp/releases/tag/${{ steps.llama.outputs.latest }})
+          labels: automated,dependency-update
