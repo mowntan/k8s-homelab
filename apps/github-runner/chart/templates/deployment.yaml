@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "github-runner.fullname" . }}
+  labels:
+    {{- include "github-runner.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "github-runner.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "github-runner.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: GITHUB_PAT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.github.patSecretName }}
+                  key: pat
+            - name: GITHUB_REPOSITORY
+              value: {{ .Values.github.repository | quote }}
+            - name: RUNNER_NAME
+              value: {{ .Values.github.runnerName | default (include "github-runner.fullname" .) | quote }}
+            - name: RUNNER_LABELS
+              value: {{ .Values.github.runnerLabels | quote }}
+            - name: RUNNER_WORKDIR
+              value: {{ .Values.github.runnerWorkdir | quote }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: work
+              mountPath: {{ .Values.github.runnerWorkdir }}
+            {{- if .Values.docker.enabled }}
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+            {{- end }}
+      volumes:
+        - name: work
+          emptyDir: {}
+        {{- if .Values.docker.enabled }}
+        - name: docker-sock
+          hostPath:
+            path: {{ .Values.docker.socketPath }}
+            type: Socket
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

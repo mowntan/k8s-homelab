@@ -1,0 +1,59 @@
+name: Check for new GitHub Actions runner release
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  check-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get latest runner release
+        id: runner
+        run: |
+          LATEST=$(curl -fsSL https://api.github.com/repos/actions/runner/releases/latest | jq -r '.tag_name' | sed 's/^v//')
+          echo "latest=${LATEST}" >> "${GITHUB_OUTPUT}"
+
+      - name: Get current version
+        id: current
+        run: |
+          CURRENT=$(cat apps/github-runner/VERSION | tr -d '[:space:]')
+          echo "current=${CURRENT}" >> "${GITHUB_OUTPUT}"
+
+      - name: Log version comparison
+        run: |
+          echo "Current: ${{ steps.current.outputs.current }}"
+          echo "Latest:  ${{ steps.runner.outputs.latest }}"
+
+      - name: Update VERSION file
+        if: steps.runner.outputs.latest != steps.current.outputs.current
+        run: echo "${{ steps.runner.outputs.latest }}" > apps/github-runner/VERSION
+
+      - name: Open PR with version bump
+        if: steps.runner.outputs.latest != steps.current.outputs.current
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: bump GitHub Actions runner to ${{ steps.runner.outputs.latest }}"
+          branch: "update/github-runner-${{ steps.runner.outputs.latest }}"
+          title: "chore: bump GitHub Actions runner to ${{ steps.runner.outputs.latest }}"
+          body: |
+            Automated version bump for GitHub Actions self-hosted runner.
+
+            | | Version |
+            |---|---|
+            | Previous | `${{ steps.current.outputs.current }}` |
+            | New | `${{ steps.runner.outputs.latest }}` |
+
+            Merging this PR will trigger the Docker image build workflow.
+
+            [Runner ${{ steps.runner.outputs.latest }} release notes](https://github.com/actions/runner/releases/tag/v${{ steps.runner.outputs.latest }})
+          labels: automated,dependency-update

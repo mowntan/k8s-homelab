@@ -1,0 +1,46 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/mowntan/github-runner
+  pullPolicy: Always
+  # Overrides the image tag; defaults to chart appVersion
+  tag: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+# GitHub configuration — set these at deploy time, do not commit values here
+github:
+  # GitHub repository in "owner/repo" format
+  repository: ""
+  # Name shown in GitHub Actions UI
+  runnerName: ""
+  # Comma-separated labels assigned to this runner
+  runnerLabels: "self-hosted,linux,arm64"
+  # Work directory inside the container
+  runnerWorkdir: /work
+  # Name of the Kubernetes secret containing the PAT (key: pat)
+  patSecretName: github-runner-pat
+
+# Mount the host Docker socket so workflow steps can build images
+docker:
+  enabled: true
+  socketPath: /var/run/docker.sock
+
+# Pin the runner to specific nodes (e.g. arm64 RPi nodes)
+nodeSelector:
+  kubernetes.io/arch: arm64
+
+tolerations: []
+
+affinity: {}
+
+resources: {}
+
+# Security context — runner needs to access Docker socket (root group)
+podSecurityContext:
+  fsGroup: 0
+
+securityContext:
+  runAsUser: 1001
+  runAsGroup: 1001
