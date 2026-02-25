@@ -15,7 +15,8 @@ RUN git clone --depth 1 --branch b${LLAMA_CPP_VERSION} \
     https://github.com/ggml-org/llama.cpp.git /build && \
     cmake -B /build/build /build \
         -DLLAMA_BUILD_TESTS=OFF \
-        -DBUILD_SHARED_LIBS=OFF && \
+        -DBUILD_SHARED_LIBS=OFF \
+        -DGGML_RPC=ON && \
     cmake --build /build/build --target llama-server rpc-server -j$(nproc) && \
     mkdir -p /out && \
     cp /build/build/bin/llama-server /out/llama-server && \
