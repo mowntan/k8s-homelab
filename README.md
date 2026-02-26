@@ -8,7 +8,10 @@ This repository maintains the following applications:
 
 | App | Description | Image | Chart | Version |
 |-----|-------------|-------|-------|---------|
+| [FlareSolverr](apps/flaresolverr) | Proxy to bypass Cloudflare protection | `ghcr.io/flaresolverr/flaresolverr` | ✅ | ![Version](https://img.shields.io/badge/version-v3.3.21-blue) |
+| [GitHub Runner](apps/github-runner) | Self-hosted GitHub Actions runner | `ghcr.io/mowntan/github-runner` | ✅ | ![Version](https://img.shields.io/badge/dynamic/json?url=https://ghcr.io/v2/mowntan/github-runner/tags/list&query=$.tags[0]&label=version) |
 | [Jackett](apps/jackett) | Torrent tracker proxy | `ghcr.io/mowntan/jackett` | ✅ | ![Version](https://img.shields.io/badge/dynamic/json?url=https://ghcr.io/v2/mowntan/jackett/tags/list&query=$.tags[0]&label=version) |
+| [OpenVPN Client](apps/openvpn-client) | OpenVPN sidecar for VPN-routed containers | `ghcr.io/mowntan/openvpn-client` | — | ![Version](https://img.shields.io/badge/dynamic/json?url=https://ghcr.io/v2/mowntan/openvpn-client/tags/list&query=$.tags[0]&label=version) |
 | [qBittorrent](apps/qbittorrent) | BitTorrent client | `ghcr.io/mowntan/qbittorrent` | ✅ | ![Version](https://img.shields.io/badge/dynamic/json?url=https://ghcr.io/v2/mowntan/qbittorrent/tags/list&query=$.tags[0]&label=version) |
 | [Radarr](apps/radarr) | Movie collection manager | `ghcr.io/mowntan/radarr` | ✅ | ![Version](https://img.shields.io/badge/dynamic/json?url=https://ghcr.io/v2/mowntan/radarr/tags/list&query=$.tags[0]&label=version) |
 | [SABnzbd](apps/sabnzbd) | Usenet download client | `ghcr.io/mowntan/sabnzbd` | ✅ | ![Version](https://img.shields.io/badge/dynamic/json?url=https://ghcr.io/v2/mowntan/sabnzbd/tags/list&query=$.tags[0]&label=version) |
@@ -19,18 +22,22 @@ This repository maintains the following applications:
 ```
 k8s-homelab/
 ├── apps/
-│   ├── jackett/
+│   ├── flaresolverr/
 │   │   ├── docker/Dockerfile       # Docker image definition
 │   │   ├── chart/                  # Helm chart
-│   │   ├── .github/workflows/      # CI/CD automation
 │   │   ├── VERSION                 # Current version
 │   │   └── README.md
-│   ├── qbittorrent/
+│   ├── github-runner/
+│   ├── jackett/
+│   ├── openvpn-client/             # Sidecar image (no standalone chart)
+│   ├── qbittorrent/                # Includes optional VPN sidecar support
 │   ├── radarr/
 │   ├── sabnzbd/
 │   └── sonarr/
-└── charts/                          # Published Helm chart repository (via GitHub Pages)
+└── .github/workflows/              # CI/CD automation for all apps
 ```
+
+Charts are published to GitHub Pages at `https://mowntan.github.io/k8s-homelab/charts` via the `release-charts.yml` workflow.
 
 ## Using the Docker Images
 

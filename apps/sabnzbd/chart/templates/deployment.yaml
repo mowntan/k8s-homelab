@@ -6,6 +6,8 @@ metadata:
     {{- include "sabnzbd.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: {{ .Values.strategy.type }}
   selector:
     matchLabels:
       {{- include "sabnzbd.selectorLabels" . | nindent 6 }}

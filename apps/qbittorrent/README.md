@@ -8,7 +8,7 @@ The image is published to the GitHub Container Registry and automatically update
 
 ```
 ghcr.io/mowntan/qbittorrent:latest
-ghcr.io/mowntan/qbittorrent:<version>   # e.g. 5.0.2
+ghcr.io/mowntan/qbittorrent:<version>   # e.g. 4.6.3
 ```
 
 ### Quick start
@@ -123,7 +123,7 @@ Build a specific qBittorrent version:
 
 ```bash
 docker build \
-  --build-arg QBITTORRENT_VERSION=5.0.2 \
+  --build-arg QBITTORRENT_VERSION=4.6.3 \
   -t qbittorrent:local \
   -f docker/Dockerfile docker/
 ```

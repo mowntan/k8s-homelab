@@ -1,5 +1,8 @@
 replicaCount: 1
 
+strategy:
+  type: Recreate
+
 image:
   repository: ghcr.io/mowntan/jackett
   pullPolicy: IfNotPresent
