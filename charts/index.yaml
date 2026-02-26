@@ -3,9 +3,9 @@ entries:
   flaresolverr:
   - apiVersion: v2
     appVersion: v3.3.21
-    created: "2026-02-26T02:24:14.607647257Z"
+    created: "2026-02-26T02:58:18.253955772Z"
     description: FlareSolverr - Proxy server to bypass Cloudflare protection
-    digest: 3e3a659842392b62c716e6439cd7526ab4df87d057e4814055a94125d74c1771
+    digest: f654a5aa5848b0fb6847c37887c1751034d371de98855a695cf93e60ed95e6f1
     name: flaresolverr
     type: application
     urls:
@@ -14,9 +14,9 @@ entries:
   github-runner:
   - apiVersion: v2
     appVersion: 2.332.0
-    created: "2026-02-26T02:24:14.608207648Z"
+    created: "2026-02-26T02:58:18.254223368Z"
     description: Self-hosted GitHub Actions runner
-    digest: 871d40e2d23b383a818a6d114133bf213171f479744cec80e26b79d5d01664ee
+    digest: e7fc56092fdd8aba84b711e9428de3bdabb32c9fee9210e4535108d6e41120ea
     name: github-runner
     type: application
     urls:
@@ -25,9 +25,9 @@ entries:
   jackett:
   - apiVersion: v2
     appVersion: 0.24.1184
-    created: "2026-02-26T02:24:14.608545705Z"
+    created: "2026-02-26T02:58:18.254527963Z"
     description: Jackett torrent tracker proxy
-    digest: b1bdf37b20cc16f7e3e03ed5eb8c7fcc97a9b5dc9b6ea294ede5151018bef65b
+    digest: c34259c1ea6da1960796f981b138c56acb5b34fbb2d92127f4a1cc9142633062
     name: jackett
     type: application
     urls:
@@ -36,9 +36,9 @@ entries:
   llama-cpp:
   - apiVersion: v2
     appVersion: b8148
-    created: "2026-02-26T02:24:14.608932323Z"
+    created: "2026-02-26T02:58:18.254869726Z"
     description: llama.cpp distributed inference with RPC multi-node support
-    digest: a0414cc7ccbab40d65cf0839ce83049fa35dc46c33fce5673a7ec45b1d4e29c6
+    digest: 1204db85a827af617df2bb1b7bb1616e617a9ee6419b5dafb590bd786c5f983a
     name: llama-cpp
     type: application
     urls:
@@ -47,9 +47,9 @@ entries:
   ollama:
   - apiVersion: v2
     appVersion: 0.17.0
-    created: "2026-02-26T02:24:14.609296299Z"
+    created: "2026-02-26T02:58:18.255263476Z"
     description: Ollama local large language model server
-    digest: d54342fe6f2e0e207b43008c744be87dbe6028a0d9a5f50824720822e58e31ab
+    digest: d5a1410ce81f1674847f3762c684ae4ab122ea116ec642d538e1e516c05bdf91
     name: ollama
     type: application
     urls:
@@ -58,9 +58,9 @@ entries:
   qbittorrent:
   - apiVersion: v2
     appVersion: 4.6.3
-    created: "2026-02-26T02:24:14.609725438Z"
+    created: "2026-02-26T02:58:18.255656304Z"
     description: qBittorrent torrent client
-    digest: 3617d14ad38bca78a4925a97908e39e9c5cacb488f34d0948f8f2cf2d2ec847b
+    digest: 4b263cf6fdbf5aac1ee0638b52be8d7587e737572f61292720469c072eba08e6
     name: qbittorrent
     type: application
     urls:
@@ -69,9 +69,9 @@ entries:
   radarr:
   - apiVersion: v2
     appVersion: 5.16.3.9541
-    created: "2026-02-26T02:24:14.61010847Z"
+    created: "2026-02-26T02:58:18.255941112Z"
     description: Radarr movie collection manager
-    digest: 7437be69454b027deba69315659e0c3904a708e681cbc55d3da952d2104b1cd1
+    digest: c6b46cd8381322cc91f40154b9bdbfd1b0eaeefe670397fc82bd78e0026131af
     name: radarr
     type: application
     urls:
@@ -80,9 +80,9 @@ entries:
   sabnzbd:
   - apiVersion: v2
     appVersion: 4.5.5
-    created: "2026-02-26T02:24:14.610417091Z"
+    created: "2026-02-26T02:58:18.256277766Z"
     description: SABnzbd Usenet download client
-    digest: 7342a4d3256388b514e0e9f8639af0bf7b59085b4cefb2b9945a48a319816b25
+    digest: 8b8c3d2e8a9551c9bbc6d7d860daf0efa7e9b401848b580513871fd7c29e8570
     name: sabnzbd
     type: application
     urls:
@@ -91,12 +91,12 @@ entries:
   sonarr:
   - apiVersion: v2
     appVersion: 4.0.11.2680
-    created: "2026-02-26T02:24:14.610704763Z"
+    created: "2026-02-26T02:58:18.256563456Z"
     description: Sonarr TV series collection manager
-    digest: 660b591a7ef4e7cfb7e647ddbd0545deda5265720740ea50231a943fa1fe83fd
+    digest: 580570e39deaec3852e1a952951c2d93abc2516dbecb9b637c7d74ceaf24ba59
     name: sonarr
     type: application
     urls:
     - https://mowntan.github.io/k8s-homelab/charts/sonarr-1.0.0.tgz
     version: 1.0.0
-generated: "2026-02-26T02:24:14.606720671Z"
+generated: "2026-02-26T02:58:18.253545763Z"
