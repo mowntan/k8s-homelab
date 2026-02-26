@@ -3,9 +3,9 @@ entries:
   flaresolverr:
   - apiVersion: v2
     appVersion: v3.3.21
-    created: "2026-02-26T20:48:57.939816363Z"
+    created: "2026-02-26T20:56:08.278847198Z"
     description: FlareSolverr - Proxy server to bypass Cloudflare protection
-    digest: 730ddf79ceae666cf2c821e27d5882d48e7e3c1cfe4383215359cb80be0ee42e
+    digest: af30567af7743d619ad84585f46618df5b8fda01d35adb9550a60dc028b29df5
     name: flaresolverr
     type: application
     urls:
@@ -14,9 +14,9 @@ entries:
   github-runner:
   - apiVersion: v2
     appVersion: 2.332.0
-    created: "2026-02-26T20:48:57.940235876Z"
+    created: "2026-02-26T20:56:08.279092599Z"
     description: Self-hosted GitHub Actions runner
-    digest: 3c43d7bffeb8cfb5309cd59a839c49c6fcc05fa059bca7e0e4eefbd7d11f8321
+    digest: ec933bfe3d2dca3c8eb04b7fe8f727b6207cc1ecfe56c98ddced6b440f3f54fb
     name: github-runner
     type: application
     urls:
@@ -25,9 +25,9 @@ entries:
   jackett:
   - apiVersion: v2
     appVersion: 0.24.1184
-    created: "2026-02-26T20:48:57.940852847Z"
+    created: "2026-02-26T20:56:08.279415515Z"
     description: Jackett torrent tracker proxy
-    digest: e6a957cb08873e2b2b917b1beb5ddc3c791fa7edc790f7aaf237e2426d1db020
+    digest: 7022ef3eb87eb8340031c3175738556eafa4c6b4f22863f63220234b119b7ea0
     name: jackett
     type: application
     urls:
@@ -36,9 +36,9 @@ entries:
   qbittorrent:
   - apiVersion: v2
     appVersion: 4.6.3
-    created: "2026-02-26T20:48:57.941578336Z"
+    created: "2026-02-26T20:56:08.279800779Z"
     description: qBittorrent torrent client
-    digest: 683abc98cbf6e72a4b210091726e43fe3477e330c8d6ace645469fda6428d2a9
+    digest: f7f48b766e054caedc18fc3abf9d5ae82f72ac263ded7327fc4bccb0b921060a
     name: qbittorrent
     type: application
     urls:
@@ -47,9 +47,9 @@ entries:
   radarr:
   - apiVersion: v2
     appVersion: 5.16.3.9541
-    created: "2026-02-26T20:48:57.942127835Z"
+    created: "2026-02-26T20:56:08.280100693Z"
     description: Radarr movie collection manager
-    digest: c15aace7d752b55dc53952412c58454f7c524f9501d7b03f9c6fe7842e2723f8
+    digest: 32c464c851a8eacc8ce5529b90807bd3021e354e0c906b1c99569e264e37950d
     name: radarr
     type: application
     urls:
@@ -58,9 +58,9 @@ entries:
   sabnzbd:
   - apiVersion: v2
     appVersion: 4.5.5
-    created: "2026-02-26T20:48:57.942721926Z"
+    created: "2026-02-26T20:56:08.280410605Z"
     description: SABnzbd Usenet download client
-    digest: dbc8cd5dc686836f37ab76fc92a8e3229022ee4d22d2930993845ecdcb4d43fd
+    digest: 5067142a50faf8e50f85986582633b1b997b82f44d4fa7c2c13cf3ac2dc6e59c
     name: sabnzbd
     type: application
     urls:
@@ -69,12 +69,12 @@ entries:
   sonarr:
   - apiVersion: v2
     appVersion: 4.0.11.2680
-    created: "2026-02-26T20:48:57.943321869Z"
+    created: "2026-02-26T20:56:08.280718203Z"
     description: Sonarr TV series collection manager
-    digest: 4da9cc9c1b207281cb2c2c2c2ed1d488f05608ce370273893188f8b83428cba2
+    digest: 55b0bbb9b76a31f73807d4e1f80da4d3fb4af6dc89c25b5810f02790ca70c038
     name: sonarr
     type: application
     urls:
     - https://mowntan.github.io/k8s-homelab/charts/sonarr-1.0.0.tgz
     version: 1.0.0
-generated: "2026-02-26T20:48:57.939111097Z"
+generated: "2026-02-26T20:56:08.278448538Z"
