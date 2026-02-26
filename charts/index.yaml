@@ -3,9 +3,9 @@ entries:
   flaresolverr:
   - apiVersion: v2
     appVersion: v3.3.21
-    created: "2026-02-26T02:58:18.253955772Z"
+    created: "2026-02-26T20:48:57.939816363Z"
     description: FlareSolverr - Proxy server to bypass Cloudflare protection
-    digest: f654a5aa5848b0fb6847c37887c1751034d371de98855a695cf93e60ed95e6f1
+    digest: 730ddf79ceae666cf2c821e27d5882d48e7e3c1cfe4383215359cb80be0ee42e
     name: flaresolverr
     type: application
     urls:
@@ -14,9 +14,9 @@ entries:
   github-runner:
   - apiVersion: v2
     appVersion: 2.332.0
-    created: "2026-02-26T02:58:18.254223368Z"
+    created: "2026-02-26T20:48:57.940235876Z"
     description: Self-hosted GitHub Actions runner
-    digest: e7fc56092fdd8aba84b711e9428de3bdabb32c9fee9210e4535108d6e41120ea
+    digest: 3c43d7bffeb8cfb5309cd59a839c49c6fcc05fa059bca7e0e4eefbd7d11f8321
     name: github-runner
     type: application
     urls:
@@ -25,42 +25,20 @@ entries:
   jackett:
   - apiVersion: v2
     appVersion: 0.24.1184
-    created: "2026-02-26T02:58:18.254527963Z"
+    created: "2026-02-26T20:48:57.940852847Z"
     description: Jackett torrent tracker proxy
-    digest: c34259c1ea6da1960796f981b138c56acb5b34fbb2d92127f4a1cc9142633062
+    digest: e6a957cb08873e2b2b917b1beb5ddc3c791fa7edc790f7aaf237e2426d1db020
     name: jackett
     type: application
     urls:
     - https://mowntan.github.io/k8s-homelab/charts/jackett-1.0.0.tgz
     version: 1.0.0
-  llama-cpp:
-  - apiVersion: v2
-    appVersion: b8148
-    created: "2026-02-26T02:58:18.254869726Z"
-    description: llama.cpp distributed inference with RPC multi-node support
-    digest: 1204db85a827af617df2bb1b7bb1616e617a9ee6419b5dafb590bd786c5f983a
-    name: llama-cpp
-    type: application
-    urls:
-    - https://mowntan.github.io/k8s-homelab/charts/llama-cpp-1.0.0.tgz
-    version: 1.0.0
-  ollama:
-  - apiVersion: v2
-    appVersion: 0.17.0
-    created: "2026-02-26T02:58:18.255263476Z"
-    description: Ollama local large language model server
-    digest: d5a1410ce81f1674847f3762c684ae4ab122ea116ec642d538e1e516c05bdf91
-    name: ollama
-    type: application
-    urls:
-    - https://mowntan.github.io/k8s-homelab/charts/ollama-1.0.0.tgz
-    version: 1.0.0
   qbittorrent:
   - apiVersion: v2
     appVersion: 4.6.3
-    created: "2026-02-26T02:58:18.255656304Z"
+    created: "2026-02-26T20:48:57.941578336Z"
     description: qBittorrent torrent client
-    digest: 4b263cf6fdbf5aac1ee0638b52be8d7587e737572f61292720469c072eba08e6
+    digest: 683abc98cbf6e72a4b210091726e43fe3477e330c8d6ace645469fda6428d2a9
     name: qbittorrent
     type: application
     urls:
@@ -69,9 +47,9 @@ entries:
   radarr:
   - apiVersion: v2
     appVersion: 5.16.3.9541
-    created: "2026-02-26T02:58:18.255941112Z"
+    created: "2026-02-26T20:48:57.942127835Z"
     description: Radarr movie collection manager
-    digest: c6b46cd8381322cc91f40154b9bdbfd1b0eaeefe670397fc82bd78e0026131af
+    digest: c15aace7d752b55dc53952412c58454f7c524f9501d7b03f9c6fe7842e2723f8
     name: radarr
     type: application
     urls:
@@ -80,9 +58,9 @@ entries:
   sabnzbd:
   - apiVersion: v2
     appVersion: 4.5.5
-    created: "2026-02-26T02:58:18.256277766Z"
+    created: "2026-02-26T20:48:57.942721926Z"
     description: SABnzbd Usenet download client
-    digest: 8b8c3d2e8a9551c9bbc6d7d860daf0efa7e9b401848b580513871fd7c29e8570
+    digest: dbc8cd5dc686836f37ab76fc92a8e3229022ee4d22d2930993845ecdcb4d43fd
     name: sabnzbd
     type: application
     urls:
@@ -91,12 +69,12 @@ entries:
   sonarr:
   - apiVersion: v2
     appVersion: 4.0.11.2680
-    created: "2026-02-26T02:58:18.256563456Z"
+    created: "2026-02-26T20:48:57.943321869Z"
     description: Sonarr TV series collection manager
-    digest: 580570e39deaec3852e1a952951c2d93abc2516dbecb9b637c7d74ceaf24ba59
+    digest: 4da9cc9c1b207281cb2c2c2c2ed1d488f05608ce370273893188f8b83428cba2
     name: sonarr
     type: application
     urls:
     - https://mowntan.github.io/k8s-homelab/charts/sonarr-1.0.0.tgz
     version: 1.0.0
-generated: "2026-02-26T02:58:18.253545763Z"
+generated: "2026-02-26T20:48:57.939111097Z"
