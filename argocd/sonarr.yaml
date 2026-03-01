@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sonarr
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+    - repoURL: git@github.com:mowntan/helm-values.git
+      targetRevision: HEAD
+      ref: values
+    - repoURL: git@github.com:mowntan/k8s-homelab.git
+      targetRevision: HEAD
+      path: apps/sonarr/chart
+      helm:
+        valueFiles:
+          - $values/sonarr/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
