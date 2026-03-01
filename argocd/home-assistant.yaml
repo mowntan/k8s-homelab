@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: home-assistant
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+    - repoURL: git@github.com:mowntan/helm-values.git
+      targetRevision: HEAD
+      ref: values
+    - repoURL: http://pajikos.github.io/home-assistant-helm-chart/
+      targetRevision: 0.3.37
+      chart: home-assistant
+      helm:
+        valueFiles:
+          - $values/home-assistant/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
