@@ -8,10 +8,10 @@ metadata:
 spec:
   project: default
   sources:
-    - repoURL: git@github.com:mowntan/helm-values.git
+    - repoURL: https://github.com/mowntan/helm-values.git
       targetRevision: HEAD
       ref: values
-    - repoURL: git@github.com:mowntan/k8s-homelab.git
+    - repoURL: https://github.com/mowntan/k8s-homelab.git
       targetRevision: HEAD
       path: apps/sabnzbd/chart
       helm:

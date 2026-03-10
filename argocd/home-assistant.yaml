@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   sources:
-    - repoURL: git@github.com:mowntan/helm-values.git
+    - repoURL: https://github.com/mowntan/helm-values.git
       targetRevision: HEAD
       ref: values
     - repoURL: http://pajikos.github.io/home-assistant-helm-chart/
