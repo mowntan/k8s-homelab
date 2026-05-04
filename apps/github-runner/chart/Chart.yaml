@@ -1,6 +1,0 @@
-apiVersion: v2
-name: github-runner
-description: Self-hosted GitHub Actions runner
-type: application
-version: 1.0.0
-appVersion: "2.332.0"
