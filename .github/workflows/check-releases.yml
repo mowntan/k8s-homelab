@@ -1,0 +1,139 @@
+name: Check for app updates
+
+# Daily upstream-version check for every app.
+#   - patch update (major.minor unchanged) -> committed to main + build dispatched automatically
+#   - minor/major update                   -> opened as a review PR, held for a human
+# The build workflow promotes Chart.yaml appVersion once the image is pushed,
+# which is what ArgoCD renders and rolls out to the cluster.
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - app: jackett
+            display: Jackett
+            repo: Jackett/Jackett
+            source: release
+            strip: v
+          - app: qbittorrent
+            display: qBittorrent
+            repo: qbittorrent/qBittorrent
+            source: tag
+            strip: release-
+          - app: radarr
+            display: Radarr
+            repo: Radarr/Radarr
+            source: release
+            strip: v
+          - app: sabnzbd
+            display: SABnzbd
+            repo: sabnzbd/sabnzbd
+            source: release
+            strip: ""
+          - app: sonarr
+            display: Sonarr
+            repo: Sonarr/Sonarr
+            source: release
+            strip: v
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve latest upstream version
+        id: latest
+        run: |
+          if [ "${{ matrix.source }}" = "tag" ]; then
+            raw=$(curl -fsSL "https://api.github.com/repos/${{ matrix.repo }}/tags?per_page=1" | jq -r '.[0].name')
+          else
+            raw=$(curl -fsSL "https://api.github.com/repos/${{ matrix.repo }}/releases/latest" | jq -r '.tag_name')
+          fi
+          latest="${raw#${{ matrix.strip }}}"
+          if [ -z "$latest" ] || [ "$latest" = "null" ]; then
+            echo "::error::Could not resolve latest version for ${{ matrix.app }}"
+            exit 1
+          fi
+          echo "latest=${latest}" >> "$GITHUB_OUTPUT"
+
+      - name: Read current version
+        id: current
+        run: echo "current=$(cat apps/${{ matrix.app }}/VERSION | tr -d '[:space:]')" >> "$GITHUB_OUTPUT"
+
+      - name: Classify update
+        id: classify
+        run: |
+          cur='${{ steps.current.outputs.current }}'
+          new='${{ steps.latest.outputs.latest }}'
+          if [ "$cur" = "$new" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Up to date ($cur)"
+            exit 0
+          fi
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          if [ "$(echo "$cur" | cut -d. -f1-2)" = "$(echo "$new" | cut -d. -f1-2)" ]; then
+            echo "review=false" >> "$GITHUB_OUTPUT"
+            echo "patch: $cur -> $new (auto)"
+          else
+            echo "review=true" >> "$GITHUB_OUTPUT"
+            echo "minor/major: $cur -> $new (needs review)"
+          fi
+
+      - name: Auto-deploy patch update
+        if: steps.classify.outputs.changed == 'true' && steps.classify.outputs.review == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          new='${{ steps.latest.outputs.latest }}'
+          echo "$new" > apps/${{ matrix.app }}/VERSION
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/${{ matrix.app }}/VERSION
+          git commit -m "chore: bump ${{ matrix.display }} to ${new}"
+          # Multiple matrix legs may push to main on the same run; rebase-retry to avoid races.
+          for attempt in 1 2 3 4 5; do
+            if git pull --rebase origin main && git push origin HEAD:main; then
+              break
+            fi
+            echo "push attempt ${attempt} failed, retrying"
+            sleep $(( (RANDOM % 5) + 2 ))
+          done
+          # GITHUB_TOKEN pushes do not trigger the push event, so dispatch the build explicitly.
+          gh workflow run ${{ matrix.app }}-build.yml --ref main
+
+      - name: Stage version for review PR
+        if: steps.classify.outputs.changed == 'true' && steps.classify.outputs.review == 'true'
+        run: echo "${{ steps.latest.outputs.latest }}" > apps/${{ matrix.app }}/VERSION
+
+      - name: Open review PR (minor/major)
+        if: steps.classify.outputs.changed == 'true' && steps.classify.outputs.review == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: bump ${{ matrix.display }} to ${{ steps.latest.outputs.latest }}"
+          branch: "update/${{ matrix.app }}"
+          delete-branch: true
+          title: "chore: bump ${{ matrix.display }} to ${{ steps.latest.outputs.latest }} (needs review)"
+          labels: automated,dependency-update,needs-review
+          body: |
+            Automated **minor/major** version bump for ${{ matrix.display }} — held for human review.
+
+            | | Version |
+            |---|---|
+            | Current (deployed) | `${{ steps.current.outputs.current }}` |
+            | New | `${{ steps.latest.outputs.latest }}` |
+
+            Review the upstream release notes for breaking changes, then merge.
+            On merge the image is built and ArgoCD rolls it out to the cluster automatically.
