@@ -54,20 +54,49 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Resolve latest upstream version
+      - name: Resolve latest upstream release
         id: latest
+        env:
+          REPO: ${{ matrix.repo }}
+          SOURCE: ${{ matrix.source }}
+          STRIP: ${{ matrix.strip }}
+          APP: ${{ matrix.app }}
         run: |
-          if [ "${{ matrix.source }}" = "tag" ]; then
-            raw=$(curl -fsSL "https://api.github.com/repos/${{ matrix.repo }}/tags?per_page=1" | jq -r '.[0].name')
+          # Untrusted upstream values go through env, never inline ${{ }}, to avoid script injection.
+          if [ "$SOURCE" = "tag" ]; then
+            tag=$(curl -fsSL "https://api.github.com/repos/${REPO}/tags?per_page=1" | jq -r '.[0].name')
+            body=$(curl -fsSL "https://api.github.com/repos/${REPO}/releases/tags/${tag}" | jq -r '.body // ""')
           else
-            raw=$(curl -fsSL "https://api.github.com/repos/${{ matrix.repo }}/releases/latest" | jq -r '.tag_name')
+            resp=$(curl -fsSL "https://api.github.com/repos/${REPO}/releases/latest")
+            tag=$(printf '%s' "$resp" | jq -r '.tag_name')
+            body=$(printf '%s' "$resp" | jq -r '.body // ""')
           fi
-          latest="${raw#${{ matrix.strip }}}"
+          latest="${tag#$STRIP}"
           if [ -z "$latest" ] || [ "$latest" = "null" ]; then
-            echo "::error::Could not resolve latest version for ${{ matrix.app }}"
+            echo "::error::Could not resolve latest version for ${APP}"
             exit 1
           fi
           echo "latest=${latest}" >> "$GITHUB_OUTPUT"
+
+          # Build a review-friendly notes block: strip CRs, cap length, and defang
+          # @mentions / #refs with a zero-width space so embedding upstream notes
+          # doesn't ping people or cross-link issues in this repo.
+          zwsp=$'\u200b'  # zero-width space; bash expands \u in $'' to the real byte
+          notes=$(printf '%s' "$body" \
+            | tr -d '\r' \
+            | head -n 60 | head -c 5000 \
+            | sed -E "s/@([A-Za-z0-9])/@${zwsp}\\1/g; s/#([0-9])/#${zwsp}\\1/g")
+          if [ "${#body}" -gt 5000 ]; then
+            notes="${notes}"$'\n\n_…release notes truncated; see the upstream link above…_'
+          fi
+          if [ -z "$notes" ]; then
+            notes="_No release notes published upstream._"
+          fi
+          {
+            echo "notes<<RELEASE_NOTES_EOF"
+            printf '%s\n' "$notes"
+            echo "RELEASE_NOTES_EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Read current version
         id: current
@@ -136,5 +165,12 @@ jobs:
             | Current (deployed) | `${{ steps.current.outputs.current }}` |
             | New | `${{ steps.latest.outputs.latest }}` |
 
-            Review the upstream release notes for breaking changes, then merge.
+            Review the release notes below for breaking changes, then merge.
             On merge the image is built and ArgoCD rolls it out to the cluster automatically.
+
+            <details>
+            <summary>📝 ${{ matrix.display }} ${{ steps.latest.outputs.latest }} release notes</summary>
+
+            ${{ steps.latest.outputs.notes }}
+
+            </details>
