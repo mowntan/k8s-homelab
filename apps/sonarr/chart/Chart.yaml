@@ -3,4 +3,4 @@ name: sonarr
 description: Sonarr TV series collection manager
 type: application
 version: 1.0.0
-appVersion: "4.0.16.2944"
+appVersion: "4.0.19.2979"
