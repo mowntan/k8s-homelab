@@ -3,4 +3,4 @@ name: radarr
 description: Radarr movie collection manager
 type: application
 version: 1.0.0
-appVersion: "5.16.3.9541"
+appVersion: "6.0.4.10291"
