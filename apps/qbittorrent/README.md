@@ -87,6 +87,16 @@ helm install qbittorrent ./chart
 helm install qbittorrent ./chart -f my-values.yaml
 ```
 
+### WebUI login
+
+Set `webui.passwordPBKDF2` and an init container writes the login, subnet whitelist and CSRF/clickjacking settings into `qBittorrent.conf` on every start (UI edits to these are overwritten). Unset, the chart leaves auth untouched. Generate the hash:
+
+```bash
+python3 -c 'import base64,getpass,hashlib,os; s=os.urandom(16); k=hashlib.pbkdf2_hmac("sha512",getpass.getpass().encode(),s,100000); print("@ByteArray(%s:%s)" % (base64.b64encode(s).decode(), base64.b64encode(k).decode()))'
+```
+
+Keep `webui.authSubnetWhitelist` free of the pod CIDR: the ingress controller runs there, so whitelisting it disables login for all ingress traffic. In-cluster clients (Sonarr, Radarr) need the username/password in their download client settings.
+
 ---
 
 ## CI/CD

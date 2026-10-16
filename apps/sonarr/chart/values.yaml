@@ -23,6 +23,10 @@ env:
   - name: TZ
     value: "UTC"
 
+# Sonarr redacts API keys in its log files but not on stdout, which Alloy ships
+# to Loki. Failing indexer requests log the full URL (apikey included) at Warn.
+consoleLogLevel: error
+
 service:
   type: ClusterIP
   port: 8989

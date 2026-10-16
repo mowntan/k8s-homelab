@@ -13,6 +13,10 @@ spec:
       {{- include "qbittorrent.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      {{- if .Values.webui.passwordPBKDF2 }}
+      annotations:
+        checksum/webui: {{ toJson .Values.webui | sha256sum }}
+      {{- end }}
       labels:
         {{- include "qbittorrent.selectorLabels" . | nindent 8 }}
     spec:
@@ -21,6 +25,35 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       dnsPolicy: ClusterFirst
+      {{- if and .Values.webui.passwordPBKDF2 .Values.persistence.config.enabled }}
+      initContainers:
+        - name: enforce-webui-auth
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["python3", "/scripts/enforce-webui-auth.py"]
+          env:
+            - name: WEBUI_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "qbittorrent.fullname" . }}-webui
+                  key: username
+            - name: WEBUI_PASSWORD_PBKDF2
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "qbittorrent.fullname" . }}-webui
+                  key: password-pbkdf2
+            - name: WEBUI_AUTH_SUBNET_WHITELIST
+              value: {{ join "," .Values.webui.authSubnetWhitelist | quote }}
+            - name: WEBUI_CSRF_PROTECTION
+              value: {{ .Values.webui.csrfProtection | quote }}
+            - name: WEBUI_CLICKJACKING_PROTECTION
+              value: {{ .Values.webui.clickjackingProtection | quote }}
+          volumeMounts:
+            - name: config
+              mountPath: {{ .Values.persistence.config.mountPath }}
+            - name: webui-scripts
+              mountPath: /scripts
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           {{- with .Values.securityContext }}
@@ -107,6 +140,11 @@ spec:
           {{- end }}
         {{- end }}
       volumes:
+        {{- if and .Values.webui.passwordPBKDF2 .Values.persistence.config.enabled }}
+        - name: webui-scripts
+          configMap:
+            name: {{ include "qbittorrent.fullname" . }}-webui
+        {{- end }}
         {{- if .Values.persistence.config.enabled }}
         - name: config
           persistentVolumeClaim:

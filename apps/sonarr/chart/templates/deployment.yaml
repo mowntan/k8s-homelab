@@ -30,6 +30,10 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             {{- toYaml .Values.env | nindent 12 }}
+            {{- with .Values.consoleLogLevel }}
+            - name: SONARR__LOG__CONSOLELEVEL
+              value: {{ . | quote }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 8989

@@ -1,0 +1,52 @@
+{{- if .Values.webui.passwordPBKDF2 }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "qbittorrent.fullname" . }}-webui
+  labels:
+    {{- include "qbittorrent.labels" . | nindent 4 }}
+data:
+  enforce-webui-auth.py: |
+    # Sets WebUI auth keys in [Preferences], keeping every other line as-is.
+    import os
+
+    path = "/config/qBittorrent/config/qBittorrent.conf"
+    whitelist = [s for s in os.environ["WEBUI_AUTH_SUBNET_WHITELIST"].split(",") if s]
+    want = {
+        "WebUI\\Username": os.environ["WEBUI_USERNAME"],
+        "WebUI\\Password_PBKDF2": '"%s"' % os.environ["WEBUI_PASSWORD_PBKDF2"].strip('"'),
+        "WebUI\\LocalHostAuth": "true",
+        "WebUI\\AuthSubnetWhitelistEnabled": "true" if whitelist else "false",
+        "WebUI\\AuthSubnetWhitelist": ",".join(whitelist) if whitelist else "@Invalid()",
+        "WebUI\\CSRFProtection": os.environ["WEBUI_CSRF_PROTECTION"],
+        "WebUI\\ClickjackingProtection": os.environ["WEBUI_CLICKJACKING_PROTECTION"],
+    }
+
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    lines = open(path).read().splitlines() if os.path.exists(path) else []
+
+    section, end = None, None
+    for i, line in enumerate(lines):
+        if line.startswith("["):
+            if section == "[Preferences]":
+                end = i
+            section = line.strip()
+            continue
+        key = line.split("=", 1)[0]
+        if section == "[Preferences]" and key in want:
+            lines[i] = "%s=%s" % (key, want.pop(key))
+    if section == "[Preferences]" and end is None:
+        end = len(lines)
+
+    missing = ["%s=%s" % kv for kv in want.items()]
+    if end is None:
+        lines += ["", "[Preferences]"] + missing
+    else:
+        while end > 0 and lines[end - 1] == "":
+            end -= 1
+        lines[end:end] = missing
+
+    with open(path, "w") as f:
+        f.write("\n".join(lines) + "\n")
+    print("enforced WebUI auth; subnet whitelist: %s" % (whitelist or "disabled"))
+{{- end }}
