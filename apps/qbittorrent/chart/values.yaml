@@ -62,6 +62,20 @@ persistence:
 
 resources: {}
 
+# WebUI auth, written into qBittorrent.conf by an init container on every
+# start. Only active once passwordPBKDF2 is set: qBittorrent 4.6+ has no
+# default password, so enforcing without one would lock everyone out.
+webui:
+  username: admin
+  # Hash as qBittorrent stores it: @ByteArray(<salt b64>:<key b64>)
+  # PBKDF2-HMAC-SHA512, 100000 iterations, 16-byte salt, 64-byte key.
+  passwordPBKDF2: ""
+  # Clients that skip login. Never add the pod CIDR (10.42.0.0/16): Traefik
+  # runs there, so every request through the ingress would skip login too.
+  authSubnetWhitelist: []
+  csrfProtection: true
+  clickjackingProtection: true
+
 nodeSelector: {}
 
 tolerations: []
